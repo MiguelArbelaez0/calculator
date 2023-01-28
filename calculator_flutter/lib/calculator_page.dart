@@ -16,7 +16,7 @@ class _CalculatorPageState extends State<CalculatorPage> {
   //
   Calculadora calculadora = Calculadora();
   //
-  double? resultado;
+  String? resultado = "";
   //
   //la variavle resultado se utiliza para guardar el resultado de la operacion
   //al presionar alguno de los botones
@@ -24,6 +24,35 @@ class _CalculatorPageState extends State<CalculatorPage> {
   // como ya sabemos el resultado guarda el resultado de la operacion oprimida ya sea
   //suma, resta , multiplicacion o division
   //
+  late double numero1, numero2;
+
+  //funciones que dentro hay un metodo , el setstate se utiliza para
+  // llamar primero el resultado luego que haga la operacion con los
+  //dos numeros
+
+  void sumar() {
+    setState(() {
+      resultado = calculadora.suma(numero1, numero2).toString();
+    });
+  }
+
+  void restar() {
+    setState(() {
+      resultado = calculadora.resta(numero1, numero2).toString();
+    });
+  }
+
+  void multiplicacion() {
+    setState(() {
+      resultado = calculadora.multiplicacion(numero1, numero2).toString();
+    });
+  }
+
+  void division() {
+    setState(() {
+      resultado = calculadora.division(numero1, numero2).toString();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,108 +63,87 @@ class _CalculatorPageState extends State<CalculatorPage> {
           'Calculadora',
         ),
       ),
-      body: Column(
-        children: <Widget>[
-          Expanded(
-            child: Text('Resultado: $resultado'),
-          ),
-          Row(
-            children: [
-              Expanded(
-                child: Container(
-                  margin: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                      backgroundColor: Colors.indigo,
-                    ),
-                    onPressed: () {
-                      //
-                      //sirve para cuando cada vez que se presione el boton
-                      // se actualize el valor del resulrado de cada operacion
-                      //
-                      setState(
-                        () {
-                          resultado = calculadora.suma(1, 1);
-                        },
-                      );
-                    },
-                    child: Text('Suma'),
-                  ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: <Widget>[
+            SizedBox(
+              height: 200,
+            ),
+            Container(
+              alignment: Alignment.center,
+              child: Text(
+                resultado!,
+                style: TextStyle(
+                  fontSize: 20,
                 ),
               ),
-              Expanded(
-                child: Container(
-                  margin: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                      backgroundColor: Colors.indigo,
+            ),
+            SizedBox(
+              height: 90,
+            ),
+            Container(
+              child: Column(
+                children: <Widget>[
+                  Container(
+                    width: 80,
+                    height: 40,
+                    child: TextFormField(
+                      decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10))),
+                      onChanged: (value) {
+                        numero1 = double.parse(value);
+                      },
                     ),
-                    onPressed: () {
-                      setState(
-                        () {
-                          resultado = calculadora.resta(2, 1);
-                        },
-                      );
-                    },
-                    child: Text('Resta'),
                   ),
-                ),
-              ),
-            ],
-          ),
-          Row(
-            children: [
-              Expanded(
-                child: Container(
-                  margin: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30),
+                  SizedBox(
+                    height: 30,
+                  ),
+                  Container(
+                    width: 80,
+                    height: 40,
+                    child: TextFormField(
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
                       ),
-                      backgroundColor: Colors.indigo,
+                      onChanged: (value) {
+                        numero2 = double.parse(value);
+                      },
                     ),
-                    onPressed: () {
-                      setState(
-                        () {
-                          resultado = calculadora.multiplicacion(9, 4);
-                        },
-                      );
-                    },
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(
+              height: 90,
+            ),
+            Container(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: <Widget>[
+                  ElevatedButton(
+                    onPressed: sumar,
+                    child: Text('Sumar'),
+                  ),
+                  ElevatedButton(
+                    onPressed: restar,
+                    child: Text('Restar'),
+                  ),
+                  ElevatedButton(
+                    onPressed: multiplicacion,
                     child: Text('Multiplicar'),
                   ),
-                ),
-              ),
-              Expanded(
-                child: Container(
-                  margin: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                      backgroundColor: Colors.indigo,
-                    ),
-                    onPressed: () {
-                      setState(
-                        () {
-                          resultado = calculadora.division(4, 2);
-                        },
-                      );
-                    },
+                  ElevatedButton(
+                    onPressed: division,
                     child: Text('Dividir'),
                   ),
-                ),
+                ],
               ),
-            ],
-          ),
-        ],
+            ),
+          ],
+        ),
       ),
     );
   }
